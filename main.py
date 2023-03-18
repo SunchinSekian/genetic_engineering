@@ -153,7 +153,6 @@ class PCRMachine():
                 try:
                     new=i.dna_pairing(j)
                     new.been_anneal=True
-                    print(self.dnadict)
                     num=self.dnadict[j]
                     self.dnadict.pop(j)
                     self.dnadict[new]=num
@@ -168,9 +167,7 @@ class PCRMachine():
             if i.been_anneal:
                 a=copy.copy(i)
                 a.sense_strand=pairing(i.template_strand)[:i.start_sen]+a.sense_strand      #此处逻辑混乱，待修改
-                print(pairing(i.template_strand))
                 self.dnadict.update({a:self.dnadict.pop(i)})
-            print(i.been_anneal)
                 
 
 
