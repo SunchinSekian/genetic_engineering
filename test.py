@@ -6,7 +6,7 @@ a=random_DNA(100)
 
 b=PCRMachine()
 #b.add(a)
-b.denature()
+
 
 c=DNA.init_with_single('ATCGCTA')
 d=Primer('TAGC')
@@ -15,7 +15,7 @@ e=Primer('ATCG')
 b.add(c)
 b.add(e)
 b.add(d)
-for i in range(4):
+for i in range(10):
     b.denature()
     b.anneal()
     b.extension()

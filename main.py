@@ -16,8 +16,6 @@ def dict_append(item,dict_):
         print(1,item)
     except:
         dict_[item]=1
-def init_defaultdict():
-    return 1
 def random_DNA(n):
     '''生成随机DNA'''
     baselist=''
@@ -135,7 +133,7 @@ class RestrictionEnzyme():
 class PCRMachine():
     def __init__(self):
         self.enzymelist=[]
-        self.dnadict={}
+        self.dnadict=defaultdict(int)
         self.primerlist=[]
     def __str__(self):
         return 'PCR仪\nDNA%s\n共有%s种DNA\n酶%s\n引物%s'%(self.dnadict,len(self.dnadict),self.enzymelist,self.primerlist)
@@ -148,16 +146,16 @@ class PCRMachine():
             if i.type=='enzyme':
                 self.enzymelist.append(i)
             elif i.type=='DNA':
-                dict_append(i,self.dnadict)
+                print(type(self.dnadict))
+                self.dnadict[i]+=1
             elif i.type=='primer':
                 self.primerlist.append(i)
     def denature(self):
         '''变性'''
-        origin_dnadict=self.dnadict
-        self.dnadict={}
+        origin_dnadict=copy.copy(self.dnadict)
+        self.dnadict.clear()
         for i in origin_dnadict:
             for j in i.dna_denature():
-                #dict_append(j,self.dnadict)
                 self.dnadict[j]=origin_dnadict[i]
     def anneal(self):
         '''退火'''
@@ -170,7 +168,7 @@ class PCRMachine():
                     new.been_anneal=True
                     num=self.dnadict[j]
                     self.dnadict.pop(j)
-                    self.dnadict[new]=num
+                    self.dnadict[new]=num*2
                     count+=1
                 except:
                     pass
