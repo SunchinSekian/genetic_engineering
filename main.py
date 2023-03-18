@@ -14,7 +14,6 @@ def dict_append(item,dict_):
     '''字典添加,已弃用'''
     try:
         dict_[item]+=1
-        print(1,item)
     except:
         dict_[item]=1
 def random_DNA(n):
@@ -51,7 +50,7 @@ class DNA:
         return a
     def __repr__(self) -> str:
         if self.sense_strand!='':
-            a="5'-%s-3'\n3'-%s-5'"%(self.template_strand,self.sense_strand)
+            a="5'-%s-3' 3'-%s-5'"%(self.template_strand,self.sense_strand)
         else:
             a="5'-%s-3'"%(self.template_strand)
         return a
@@ -137,7 +136,7 @@ class PCRMachine():
         self.dnadict=defaultdict(int)
         self.primerlist=[]
     def __str__(self):
-        return 'PCR仪\nDNA%s\n共有%s种DNA\n酶%s\n引物%s'%(self.dnadict,len(self.dnadict),self.enzymelist,self.primerlist)
+        return 'PCR仪\nDNA%s\n共有%s种DNA\n酶%s\n引物%s'%(dict(self.dnadict),len(self.dnadict),self.enzymelist,self.primerlist)
     def restart(self):
         self.enzymelist.clear()
         self.dnadict.clear()
@@ -147,7 +146,6 @@ class PCRMachine():
             if i.type=='enzyme':
                 self.enzymelist.append(i)
             elif i.type=='DNA':
-                print(type(self.dnadict))
                 self.dnadict[i]+=1
             elif i.type=='primer':
                 self.primerlist.append(i)
