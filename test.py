@@ -10,6 +10,7 @@ b=PCRMachine()
 
 c=DNA.init_with_single('ATCGCTA')
 d=Primer('TAGC')
+print(d.tm_caculater())
 e=Primer('ATCG')
 #print(d.dna_pairing(c))
 b.add(c)
