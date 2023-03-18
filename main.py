@@ -2,6 +2,7 @@ import random
 import copy
 import myerror
 from collections import defaultdict
+
 def pairing(strand1):
     '''配对'''
     pw={'A':'T','C':'G','T':'A','G':'C'}
