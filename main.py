@@ -1,7 +1,7 @@
 import random
 import copy
 import myerror
-
+from collections import defaultdict
 def pairing(strand1):
     '''配对'''
     pw={'A':'T','C':'G','T':'A','G':'C'}
@@ -10,11 +10,14 @@ def pairing(strand1):
         strand2+=pw[i]
     return strand2  #从3'到5'
 def dict_append(item,dict_):
-    '''字典添加'''
+    '''字典添加,已弃用'''
     try:
         dict_[item]+=1
+        print(1,item)
     except:
         dict_[item]=1
+def init_defaultdict():
+    return 1
 def random_DNA(n):
     '''生成随机DNA'''
     baselist=''
@@ -56,7 +59,18 @@ class DNA:
     def __len__(self):
         return max(len(self.sense_strand)+self.start_sen,len(self.template_strand))
     def __name__():
-        return 'DNA'        
+        return 'DNA' 
+    def __eq__(self, __o: object) -> bool:
+        if type(__o) !=  type(self):
+            return False
+        else:
+            if (self.template_strand,self.sense_strand,self.start_sen)==(__o.template_strand,__o.sense_strand,__o.start_sen):
+                return True
+            else:
+                return False
+    def __hash__(self) -> int:
+        a=hash(self.template_strand+self.sense_strand+str(self.start_sen))
+        return a
     def count_hydrogen_bonds(self):
         '''氢键计数'''
         n=0
@@ -143,7 +157,8 @@ class PCRMachine():
         self.dnadict={}
         for i in origin_dnadict:
             for j in i.dna_denature():
-                dict_append(j,self.dnadict)
+                #dict_append(j,self.dnadict)
+                self.dnadict[j]=origin_dnadict[i]
     def anneal(self):
         '''退火'''
         count=0
@@ -166,7 +181,7 @@ class PCRMachine():
         for i in iterdict:
             if i.been_anneal:
                 a=copy.copy(i)
-                a.sense_strand=pairing(i.template_strand)[:i.start_sen]+a.sense_strand      #此处逻辑混乱，待修改
+                a.sense_strand=pairing(i.template_strand)[:i.start_sen+len(i.sense_strand)]
                 self.dnadict.update({a:self.dnadict.pop(i)})
                 
 
