@@ -104,7 +104,13 @@ class DNA:
 class Primer(DNA):
     def __init__(self, template_strand, sense_strand='', start_sen=0):
         super().__init__(template_strand, sense_strand, start_sen)
-        self.type='primer'    
+        self.type='primer'
+    def tm_caculater(self):
+        #Tm=4℃ (G + C)+ 2℃ (A + T)
+        _=defaultdict(int)
+        for i in self.template_strand:
+            _[i]+=1
+        return 4*(_['G']+_['C'])+2*(_['A']+_['T'])    
 class RNA:
     '''RNA类'''
     def __init__(self,strand):
