@@ -8,7 +8,7 @@ def pairing(strand1):
     strand2=''
     for i in strand1:
         strand2+=pw[i]
-    return strand2
+    return strand2  #从3'到5'
 def dict_append(item,dict_):
     '''字典添加'''
     try:
@@ -34,7 +34,8 @@ class DNA:
         if self.sense_strand=='':
             self.is_single=True
         else:
-            self.is_single=False        
+            self.is_single=False
+        self.been_anneal=been_anneal     
     @classmethod
     def init_with_single(self,template_strand):
         '使用类方法自动创建双链DNA'
@@ -77,7 +78,7 @@ class DNA:
         if self.is_single is not True:
             return DNA(self.template_strand),DNA(self.sense_strand)
         else:
-            return self
+            return (self,)
     def dna_pairing(self,another_dna):
         '''主动与其他DNA配对'''
         if self.is_single and another_dna.is_single is True:
@@ -165,6 +166,11 @@ class PCRMachine():
         iterdict=copy.copy(self.dnadict)
         for i in iterdict:
             if i.been_anneal:
-                pass
+                a=copy.copy(i)
+                a.sense_strand=pairing(i.template_strand)[:i.start_sen]+a.sense_strand      #此处逻辑混乱，待修改
+                print(pairing(i.template_strand))
+                self.dnadict.update({a:self.dnadict.pop(i)})
+            print(i.been_anneal)
+                
 
 
