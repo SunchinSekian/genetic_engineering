@@ -1,5 +1,6 @@
 import random
 import copy
+import myerror
 
 def pairing(strand1):
     '''配对'''
@@ -22,13 +23,10 @@ def random_DNA(n):
         baselist+=m[random.randint(0,3)]
     return DNA.init_with_single(baselist)
 
-def cut(DNA,enzeme):    
-    pass
-
 
 class DNA:
     '''DNA类'''
-    def __init__(self,template_strand,sense_strand='',start_sen=0):
+    def __init__(self,template_strand,sense_strand='',start_sen=0,been_anneal=False):
         self.type='DNA'
         self.template_strand=template_strand    #模板链
         self.sense_strand=sense_strand      #模板链
@@ -36,7 +34,7 @@ class DNA:
         if self.sense_strand=='':
             self.is_single=True
         else:
-            self.is_single=False
+            self.is_single=False        
     @classmethod
     def init_with_single(self,template_strand):
         '使用类方法自动创建双链DNA'
@@ -85,9 +83,9 @@ class DNA:
         if self.is_single and another_dna.is_single is True:
             position=another_dna.template_strand.find(pairing(self.template_strand)[::-1])
         else:
-            raise'只能暂时配对单链'
+            raise myerror.PairingError('只能暂时配对单链')
         if position==-1:
-            raise'这两段不能配对'
+            raise myerror.PairingError('这两段不能配对')
         return DNA(another_dna.template_strand,self.template_strand[::-1],start_sen=position)
 
 class Primer(DNA):
@@ -127,8 +125,9 @@ class PCRMachine():
     def __str__(self):
         return 'PCR仪\nDNA%s\n共有%s种DNA\n酶%s\n引物%s'%(self.dnadict,len(self.dnadict),self.enzymelist,self.primerlist)
     def restart(self):
-        self.enzymelist=[]
-        self.dnalist=[]
+        self.enzymelist.clear()
+        self.dnadict.clear()
+        self.primerlist.clear()
     def add(self,*args):
         for i in args:
             if i.type=='enzyme':
@@ -152,6 +151,7 @@ class PCRMachine():
             for j in iterdict:
                 try:
                     new=i.dna_pairing(j)
+                    new.been_anneal=True
                     print(self.dnadict)
                     num=self.dnadict[j]
                     self.dnadict.pop(j)
@@ -160,5 +160,11 @@ class PCRMachine():
                 except:
                     pass
         return f'共计配对{count}种DNA单链'
+    def extension(self):
+        '''延伸'''
+        iterdict=copy.copy(self.dnadict)
+        for i in iterdict:
+            if i.been_anneal:
+                pass
 
 
