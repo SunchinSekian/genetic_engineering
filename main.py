@@ -73,18 +73,20 @@ class DNA:
         if type(__o) != type(self):
             return False
         else:
+            b = __o.sense_strand[::-1]
             if (self.template_strand, self.sense_strand, self.start_sen) == (__o.template_strand, __o.sense_strand, __o.start_sen):
                 return True
-
+            elif self.template_strand == b and self.start_sen == __o.start_sen == 0:
+                return True
             else:
                 return False
 
     def __hash__(self) -> int:
         c = self.template_strand
-        d = self.sense_strand
+        d = self.sense_strand[::-1]
         if c > d:
             c, d = d, c
-        a = hash(c+d)
+        a = hash(c+d + str(self.start_sen))
         return a
 
     def self_checking(self):
@@ -212,9 +214,9 @@ class PCRMachine():
             for j in self.primerlist:
                 try:
                     new = j.dna_pairing(i)
-                    new.been_anneal=True
+                    new.been_anneal = True
                     if new.template_strand == new.sense_strand[::-1]:
-                        new.been_anneal=False
+                        new.been_anneal = False
                     self.dnadict[new] += iterdict[i]
                 except myerror.PairingError:
                     pass
