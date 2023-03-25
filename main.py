@@ -176,11 +176,12 @@ class RestrictionEnzyme():
         self.cut = cut
 
 
-class PCRMachine():
-    def __init__(self):
+class PCRMachine:
+    def __init__(self,name='PCR扩增仪'):
         self.enzymelist = []
         self.dnadict = defaultdict(int)
         self.primerlist = []
+        self.name=name
 
     def __str__(self):
         return f'PCR仪\nDNA\n{pformat(dict(self.dnadict))}\n共有{len(self.dnadict)}种DNA\n酶{self.enzymelist}\n引物{self.primerlist}'
